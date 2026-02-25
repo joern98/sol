@@ -1,4 +1,3 @@
-import { captureException } from '@sentry/react-native'
 import { extractMeetingLink } from 'lib/calendar'
 import { solNative } from 'lib/SolNative'
 import { DateTime } from 'luxon'
@@ -175,7 +174,6 @@ export const createCalendarStore = (root: IRootStore) => {
           )
         })
       } catch (error) {
-        captureException(error)
         console.error('Failed to fetch calendar events:', error)
       }
     },
@@ -190,7 +188,6 @@ export const createCalendarStore = (root: IRootStore) => {
           try {
             store.fetchEvents()
           } catch (e) {
-            captureException(e)
             console.error('Error fetching calendar events', e)
           } finally {
             store.poll()

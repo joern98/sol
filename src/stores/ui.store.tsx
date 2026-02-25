@@ -3,7 +3,7 @@ import { Assets } from "assets";
 import { Parser } from "expr-eval";
 import { solNative } from "lib/SolNative";
 import { CONSTANTS } from "lib/constants";
-import { googleTranslate } from "lib/translator";
+import { googleTranslate, GoogleTranslateResult } from "lib/translator";
 import {
 	autorun,
 	type IReactionDisposer,
@@ -22,7 +22,6 @@ import {
 import type { IRootStore } from "store";
 import { createBaseItems } from "./items";
 import MiniSearch from "minisearch";
-import * as Sentry from "@sentry/react-native";
 import { storage } from "./storage";
 import { defaultShortcuts } from "lib/shortcuts";
 
@@ -156,7 +155,6 @@ export const createUIStore = (root: IRootStore) => {
 		try {
 			storage.set("@ui.store", JSON.stringify(plainState));
 		} catch (e) {
-			Sentry.captureException(e);
 		}
 	};
 
@@ -284,7 +282,7 @@ export const createUIStore = (root: IRootStore) => {
 		editingCustomItem: null as Item | null,
 		apps: [] as Item[],
 		isLoading: false,
-		translationResults: [] as string[],
+		translationResults: [] as GoogleTranslateResult[],
 		frequencies: {} as Record<string, number>,
 		temporaryResult: null as string | null,
 		firstTranslationLanguage: "en" as string,

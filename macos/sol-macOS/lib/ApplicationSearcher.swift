@@ -1,6 +1,5 @@
 import Cocoa
 import CoreServices
-import Sentry
 
 class Application {
   public var name: String
@@ -181,8 +180,6 @@ class Application {
       //      let breadcrumb = Breadcrumb(level: .error, category: "custom")
       //      breadcrumb.message =
       //        "Failed to start watching application folders: \(error.localizedDescription)"
-      //      SentrySDK.addBreadcrumb(breadcrumb)
-      //      SentrySDK.capture(error: error)
       print("💔 COuld not watch applications")
     }
   }
@@ -270,10 +267,6 @@ class Application {
         appUrls.append(contentsOf: getApplicationUrlsAt(directory))
       }
     } catch {
-      let breadcrumb = Breadcrumb(level: .info, category: "custom")
-      breadcrumb.message = "Error getting all applications at localDomainMask"
-      SentrySDK.addBreadcrumb(breadcrumb)
-      SentrySDK.capture(error: error)
     }
 
     var applications = [String: Application]()
@@ -292,7 +285,6 @@ class Application {
 
       do {
         // File doesn't exist but it was listed?! I don't know how this is happening but it does
-        // at least on sentry it is showing
         if !fileManager.fileExists(atPath: url.path) {
           continue
         }
@@ -307,11 +299,6 @@ class Application {
             name: name, url: urlStr, isRunning: false)
         }
       } catch {
-        let breadcrumb = Breadcrumb(level: .info, category: "custom")
-        breadcrumb.message =
-          "Error resolving info for application at \(url): \(error.localizedDescription)"
-        SentrySDK.addBreadcrumb(breadcrumb)
-        SentrySDK.capture(error: error)
       }
     }
 
@@ -396,12 +383,6 @@ class Application {
       {
         return []
       }
-
-      let breadcrumb = Breadcrumb(level: .info, category: "custom")
-      breadcrumb.message =
-        "Could not resolve apps url at \(url): \(error.localizedDescription)"
-      SentrySDK.addBreadcrumb(breadcrumb)
-      SentrySDK.capture(error: error)
       return []
     }
   }
